@@ -39,7 +39,7 @@ export default  async function TopicsList(){
 
        { ContactList.map((t,index )=>(
             
-            <div className="p-4 border border-slate-300  my-3 flex justify-between gap-5 rounded-[10px] shadow-xl" key={index}>
+            <div className=" transition-all duration-100 p-4 border border-slate-300  bg-slate-950 my-3 flex justify-between gap-5 rounded-[10px] hover:-translate-y-2 hover:translate-x-2 shadow-xl" key={index}>
                 <div>
                     <h2 className="font-bold text-2xl" >{ContactList[index].name}</h2>
                     <div >{ContactList[index].phone}</div>
