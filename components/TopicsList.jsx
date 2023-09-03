@@ -5,6 +5,7 @@ import {HiPencilAlt} from 'react-icons/hi'
 import axios from "axios";
 // import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+// import { dateFormat } from "highcharts";
 // import { useEffect } from "react";
 let ContactList=[]
 const getTopics=  async ()=>{
@@ -43,7 +44,7 @@ export default  async function TopicsList(){
                 <div>
                     <h2 className="font-bold text-2xl" >{ContactList[index].name}</h2>
                     <div >{ContactList[index].phone}</div>
-                    <div><span className="font-bold">CreatedAt:</span>{ContactList[index].CreatedAt}</div>
+                    <div><span className="font-bold">CreatedAt:</span>{Date(ContactList[index].CreatedAt)}</div>
                 </div>
     
                 <div className="flex gap-2 items-start ">

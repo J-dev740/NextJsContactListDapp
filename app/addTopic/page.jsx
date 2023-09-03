@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import {ethers} from 'ethers'
 import { useRouter } from "next/navigation";
 import * as dotenv from  'dotenv'
+import Loader from "@/components/Loader";
+import axios from "axios";
 dotenv.config()
 // import {useClient} from 'next/client'
 // const provider= new ethers.AlchemyProvider()
@@ -70,18 +72,30 @@ const Abi= [
       "stateMutability": "view",
       "type": "function"
     }
-  ]
+]
 const ValidationString=/^[0-9]{10}$/
 function AddTopic() {
     const router=useRouter()
+    const[numbervalue,setNumValue]=useState(0)
+    const[stringvalue,setStringValue]=useState('')
+    const[isloading,setLoading]=useState(false)
 
-const[numbervalue,setNumValue]=useState(0)
-const[stringvalue,setStringValue]=useState('')
+    // const checkingValidity=async()=>{
+    //     const response = await axios.get(`http://localhost:8000/user/${numbervalue}`,{
+    //         cache:'no-store'
+    //     })
+    
+    //     const data= response.data
+    //     // ContactList=data
+    //     console.log(data)
+    //     return data
 
-
+    // }
     //define handlesubmit function
     const handleSubmit=async(e)=>{
         e.preventDefault()
+
+
         if(!numbervalue||numbervalue==0||!ValidationString.test(numbervalue)){
             alert("please provide a valid Mobile number")
             return 
@@ -89,20 +103,40 @@ const[stringvalue,setStringValue]=useState('')
             alert('please provide a valid name')
             return
         }
-        const contact= new  ethers.Contract("0xb77fA9E3E251F434573972429EDfbaBD755A9d09",Abi)
-        const Contact=contact.connect(wallet)
-        try {
-            const tx=await Contact.Store(stringvalue,numbervalue)
-            await  tx.wait(1)
-            console.log('contact added....')
-            router.refresh()
-            router.push('/',{
-                replace:true
-            })
-        } catch (error) { 
-            throw new Error("Failed to Create topic:\n")
-            console.log(error)
+        axios.get(`http://localhost:8000/user`,{
+            params:{
+                number:numbervalue
+            }
+        }).then((response)=>{
+        const data= response.data[0]
+        console.log(data)
+        if(data){
+            setLoading(false)
+            alert(`User already exists Try a different PhoneNo.`)
+            return 
+           }else{
+            setLoading(true)
+           }
+        })
+        if(isloading){
+
+            const contact= new  ethers.Contract("0xb77fA9E3E251F434573972429EDfbaBD755A9d09",Abi)
+            const Contact=contact.connect(wallet)
+            try {
+                const tx=await Contact.Store(stringvalue,numbervalue)
+                await  tx.wait(1)
+                setLoading(false)
+                console.log('contact added....')
+                router.refresh()
+                router.push('/',{
+                    replace:true
+                })
+            } catch (error) { 
+                throw new Error("Failed to Create topic:\n")
+                console.log(error)
+            }
         }
+
 
 
     }
@@ -126,10 +160,16 @@ const[stringvalue,setStringValue]=useState('')
         onChange={(e)=>setNumValue(e.target.value)}
 
       />
+        {
+            isloading
+            ?   <Loader />
+            :
+                <button type="submit"  className="bg-green-600 font-bold rounded-[20px] text-white py-3 px-6 w-fit "
+                >Add Contact
+                </button>
+            
+        }
 
-      <button type="submit" className="bg-green-600 font-bold rounded-[20px] text-white py-3 px-6 w-fit "
-      >Add Contact
-      </button>
     </form>
   );
 }
