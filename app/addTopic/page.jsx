@@ -220,29 +220,23 @@ function AddTopic() {
             // params:{
             //     number:`${numbervalue}`
             // },
+        }).then((response)=>{
+            console.log(response.data)
+            let data=response.data
+                    if (data) {
+                      setLoading(false);
+                      console.log("user already exists...");
+                      alert(`User already exists Try a different PhoneNo.`);
+                      return;
+                    } else {
+                      console.log("adding user");
+                      setLoading(true);
+                      goto().then(()=>{
+                        console.log('success')
+                      })
+                    }
         })
 
-
-        .then((response)=>{
-        let data= response.data[0]
-        console.log(data)
-        if(data){
-            setLoading(false)
-            console.log('user already exists...')
-            alert(`User already exists Try a different PhoneNo.`)
-            // data={}
-            return 
-           }else{
-               console.log('adding user')
-               setLoading(true)
-                goto().then(()=>{
-                    console.log(`success`)
-                })
-           }
-           console.log('before.then')
-        })
-        console.log('after.then')
-        // if(isloading){
             async function goto(){
 
                 try {
@@ -256,6 +250,7 @@ function AddTopic() {
                         setLoading(false)
                         console.log('contact added....')
                         router.refresh()
+                        router.refresh()
                         router.push('/',{
                             replace:true
                         })
@@ -265,10 +260,6 @@ function AddTopic() {
                 }
 
             }
-        // }
-
-
-
     }
 
 
