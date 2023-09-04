@@ -7,72 +7,193 @@ import * as dotenv from  'dotenv'
 import Loader from "@/components/Loader";
 import axios from "axios";
 dotenv.config()
-// import {useClient} from 'next/client'
-// const provider= new ethers.AlchemyProvider()
-const provider= new ethers.getDefaultProvider("https://eth-sepolia.g.alchemy.com/v2/rWqzqeV4QteHsQppUXJauHl-7vENalwT")
-// const provider = new ethers.JsonRpcProvider(process.env.RPC_URL)
-const PRIVATE_KEY="0xadc627587063d15a2ea7e979d3b85c7fea2a0b08c3c6737302c4d28fa8b30a80"
 
+const provider= new ethers.getDefaultProvider("https://eth-sepolia.g.alchemy.com/v2/rWqzqeV4QteHsQppUXJauHl-7vENalwT")
+const PRIVATE_KEY="0xadc627587063d15a2ea7e979d3b85c7fea2a0b08c3c6737302c4d28fa8b30a80"
 const wallet= new ethers.Wallet(PRIVATE_KEY,provider)
-// const signer=  provider.getSigner("a81DE2e4693b9fC3Bc16Ab56D148CC938203B430").then(()=>{})
-const Contact_address= process.env.CONTRACT_ADDRESS
-const Abi= [
-    {
-      "inputs": [],
-      "stateMutability": "nonpayable",
-      "type": "constructor"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "internalType": "string",
-          "name": "name",
-          "type": "string"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "contactInfo",
-          "type": "uint256"
-        }
-      ],
-      "name": "storeContact",
-      "type": "event"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "string",
-          "name": "name",
-          "type": "string"
-        },
-        {
-          "internalType": "uint256",
-          "name": "contactNo",
-          "type": "uint256"
-        }
-      ],
-      "name": "Store",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "i_owner",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    }
+const Abi=  
+[
+  {
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "contactInfo",
+        "type": "uint256"
+      }
+    ],
+    "name": "contactRemoved",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "contactInfo",
+        "type": "uint256"
+      }
+    ],
+    "name": "storeContact",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "contactNo",
+        "type": "uint256"
+      }
+    ],
+    "name": "RemoveContact",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "contactNo",
+        "type": "uint256"
+      }
+    ],
+    "name": "Store",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "name": "UserToContact",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "i_owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
 ]
+// const Abi= 
+// [
+//     {
+//       "inputs": [],
+//       "stateMutability": "nonpayable",
+//       "type": "constructor"
+//     },
+//     {
+//       "anonymous": false,
+//       "inputs": [
+//         {
+//           "indexed": false,
+//           "internalType": "string",
+//           "name": "name",
+//           "type": "string"
+//         },
+//         {
+//           "indexed": false,
+//           "internalType": "uint256",
+//           "name": "contactInfo",
+//           "type": "uint256"
+//         }
+//       ],
+//       "name": "storeContact",
+//       "type": "event"
+//     },
+//     {
+//       "inputs": [
+//         {
+//           "internalType": "string",
+//           "name": "name",
+//           "type": "string"
+//         },
+//         {
+//           "internalType": "uint256",
+//           "name": "contactNo",
+//           "type": "uint256"
+//         }
+//       ],
+//       "name": "Store",
+//       "outputs": [],
+//       "stateMutability": "nonpayable",
+//       "type": "function"
+//     },
+//     {
+//       "inputs": [],
+//       "name": "i_owner",
+//       "outputs": [
+//         {
+//           "internalType": "address",
+//           "name": "",
+//           "type": "address"
+//         }
+//       ],
+//       "stateMutability": "view",
+//       "type": "function"
+//     }
+// ]
+// const provider = new ethers.JsonRpcProvider(process.env.RPC_URL)
+
+
+//contract_abi for storing contact details
+
+
 const ValidationString=/^[0-9]{10}$/
 function AddTopic() {
     const router=useRouter()
@@ -80,22 +201,13 @@ function AddTopic() {
     const[stringvalue,setStringValue]=useState('')
     const[isloading,setLoading]=useState(false)
 
-    // const checkingValidity=async()=>{
-    //     const response = await axios.get(`http://localhost:8000/user/${numbervalue}`,{
-    //         cache:'no-store'
-    //     })
-    
-    //     const data= response.data
-    //     // ContactList=data
-    //     console.log(data)
-    //     return data
 
-    // }
+
     //define handlesubmit function
     const handleSubmit=async(e)=>{
         e.preventDefault()
 
-
+        // setLoading(true)
         if(!numbervalue||numbervalue==0||!ValidationString.test(numbervalue)){
             alert("please provide a valid Mobile number")
             return 
@@ -103,39 +215,57 @@ function AddTopic() {
             alert('please provide a valid name')
             return
         }
-        axios.get(`http://localhost:8000/user`,{
-            params:{
-                number:numbervalue
-            }
-        }).then((response)=>{
-        const data= response.data[0]
+         axios.get(`http://localhost:8000/user/${numbervalue}`,{
+            cache:'no-store',
+            // params:{
+            //     number:`${numbervalue}`
+            // },
+        })
+
+
+        .then((response)=>{
+        let data= response.data[0]
         console.log(data)
         if(data){
             setLoading(false)
+            console.log('user already exists...')
             alert(`User already exists Try a different PhoneNo.`)
+            // data={}
             return 
            }else{
-            setLoading(true)
-           }
-        })
-        if(isloading){
-
-            const contact= new  ethers.Contract("0xb77fA9E3E251F434573972429EDfbaBD755A9d09",Abi)
-            const Contact=contact.connect(wallet)
-            try {
-                const tx=await Contact.Store(stringvalue,numbervalue)
-                await  tx.wait(1)
-                setLoading(false)
-                console.log('contact added....')
-                router.refresh()
-                router.push('/',{
-                    replace:true
+               console.log('adding user')
+               setLoading(true)
+                goto().then(()=>{
+                    console.log(`success`)
                 })
-            } catch (error) { 
-                throw new Error("Failed to Create topic:\n")
-                console.log(error)
+           }
+           console.log('before.then')
+        })
+        console.log('after.then')
+        // if(isloading){
+            async function goto(){
+
+                try {
+
+                    console.log('initializing contract')
+                    const contact= new  ethers.Contract("0x412bc555508e4e91bACaCFCB0Af717F7a4249A46",Abi)
+                    const Contact=contact.connect(wallet)
+                        console.log('initiating transaction...')
+                        const tx=await Contact.Store(stringvalue,numbervalue)
+                        await  tx.wait(1)
+                        setLoading(false)
+                        console.log('contact added....')
+                        router.refresh()
+                        router.push('/',{
+                            replace:true
+                        })
+                    
+                } catch (error) {
+                    console.log(error)
+                }
+
             }
-        }
+        // }
 
 
 
